@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{% if task %}Edit{% else %}Create{% endif %} Task</h1>
+  <form method="post">{% csrf_token %}
+    <div class="mb-3">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+    </div>
+    <div class="mb-3">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+    </div>
+    <div class="mb-3">
+      {{ form.due_date.label_tag }}
+      {{ form.due_date }}
+    </div>
+    <div class="form-check mb-3">
+      {{ form.completed }} {{ form.completed.label_tag }}
+    </div>
+    <button class="btn btn-primary" type="submit">Save</button>
+    <a class="btn btn-secondary" href="{% url 'tasks:task_list' %}">Cancel</a>
+  </form>
+{% endblock %}
