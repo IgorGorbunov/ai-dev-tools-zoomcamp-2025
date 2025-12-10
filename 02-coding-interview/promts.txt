@@ -5,8 +5,21 @@ The app should be able to do the following:
 - Allow everyone who connects to edit code in the code panel
 - Show real-time updates to all connected users
 - Support syntax highlighting for multiple languages
-- Execute code safely in the browser
+- Execute code safely in the browser.
+everything should be interactive - I can log in, sign up, see my username when I'm logged in
 I want you to create separatly frontend and backend services.
 Frontend sources should be put in ai-dev-tools-zoomcamp-2025/02-coding-interview/frontend/ and backend in ai-dev-tools-zoomcamp-2025/02-coding-interview/backend/.
 Frontend should be developed with NodeJS and backend - with FastAPI.
-Create an OpenAPI specs based on what it needs.
+Create an OpenAPI specs based on what it needs and put it in swagger.
+based on the OpenAPI specs, create fastapi backend for now use a mock database, which we will later replace with a real one.
+Frontend and backend should be covered with tests (for backend use pytest) and **размещены** in separate folders.
+implement a verify_api.py script that tests the running server to ensure all endpoints work correctly.
+Make frontend use backend. use OpenAPI specs for guidance
+follow the guidelines in AGENTS.md
+
+2. Integration Tests
+3. Running Both Client and Server
+4. Syntax Highlighting
+5. Code Execution
+6. Containerization
+7. Deployment
