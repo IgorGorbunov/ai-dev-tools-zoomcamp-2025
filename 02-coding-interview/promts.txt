@@ -1,0 +1,12 @@
+1.
+I want to implement a platform for online coding interviews.
+The app should be able to do the following:
+- Create a link and share it with candidates
+- Allow everyone who connects to edit code in the code panel
+- Show real-time updates to all connected users
+- Support syntax highlighting for multiple languages
+- Execute code safely in the browser
+I want you to create separatly frontend and backend services.
+Frontend sources should be put in ai-dev-tools-zoomcamp-2025/02-coding-interview/frontend/ and backend in ai-dev-tools-zoomcamp-2025/02-coding-interview/backend/.
+Frontend should be developed with NodeJS and backend - with FastAPI.
+Create an OpenAPI specs based on what it needs.
