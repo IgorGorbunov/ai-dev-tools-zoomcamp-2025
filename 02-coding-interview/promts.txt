@@ -15,6 +15,7 @@ based on the OpenAPI specs, create fastapi backend for now use a mock database, 
 Frontend and backend should be covered with tests (for backend use pytest) and **размещены** in separate folders.
 implement a verify_api.py script that tests the running server to ensure all endpoints work correctly.
 Make frontend use backend. use OpenAPI specs for guidance
+for init work directory of project use ai-dev-tools-zoomcamp-2025/02-coding-interview
 follow the guidelines in AGENTS.md
 
 2. Integration Tests
