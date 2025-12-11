@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Query
+from datetime import datetime
+from typing import List
 from ..schemas import (
     SessionCreate, SessionUpdate, Session, SessionDetail, 
     ExecutionRequest, ExecutionResult, Participant, SessionList, Language
@@ -14,10 +16,12 @@ async def create_session(session_data: SessionCreate, user_id: str = Depends(ver
     """Create a new interview session"""
     session = db.create_session(
         title=session_data.title,
-        language=session_data.language,
+        language=session_data.language.value,
         created_by=user_id,
-        description=session_data.description
+        description=session_data.description,
+        time_limit_minutes=session_data.time_limit_minutes
     )
+    session["participant_count"] = 1
     return session
 
 @router.get("", response_model=SessionList)
@@ -28,7 +32,7 @@ async def get_sessions(
 ):
     """Get all sessions for current user"""
     sessions, total = db.get_user_sessions(user_id, limit, offset)
-    return SessionList(total=total, items=sessions)
+    return SessionList(sessions=sessions, total=total)
 
 @router.get("/{session_id}", response_model=SessionDetail)
 async def get_session(session_id: str):
@@ -40,7 +44,15 @@ async def get_session(session_id: str):
             detail="Session not found"
         )
     
-    participants = db.get_participants(session_id)
+    participant_ids = db.get_participants(session_id)
+    participants = [
+        Participant(
+            user_id=user_id,
+            username=db.get_user(user_id)["username"],
+            joined_at=datetime.utcnow()
+        )
+        for user_id in participant_ids
+    ]
     
     return SessionDetail(
         id=session_data["id"],
@@ -50,8 +62,7 @@ async def get_session(session_id: str):
         description=session_data.get("description", ""),
         created_by=session_data["created_by"],
         created_at=session_data["created_at"],
-        updated_at=session_data["updated_at"],
-        participant_count=len(participants),
+        time_limit_minutes=session_data["time_limit_minutes"],
         participants=participants
     )
 
@@ -81,7 +92,15 @@ async def update_session(
     
     updated_session = db.update_session(session_id, **update_dict)
     
-    participants = db.get_participants(session_id)
+    participant_ids = db.get_participants(session_id)
+    participants = [
+        Participant(
+            user_id=pid,
+            username=db.get_user(pid)["username"],
+            joined_at=datetime.utcnow()
+        )
+        for pid in participant_ids
+    ]
     
     return SessionDetail(
         id=updated_session["id"],
@@ -91,8 +110,7 @@ async def update_session(
         description=updated_session.get("description", ""),
         created_by=updated_session["created_by"],
         created_at=updated_session["created_at"],
-        updated_at=updated_session["updated_at"],
-        participant_count=len(participants),
+        time_limit_minutes=updated_session["time_limit_minutes"],
         participants=participants
     )
 
@@ -125,10 +143,11 @@ async def execute_code(session_id: str, execution: ExecutionRequest):
             detail="Session not found"
         )
     
-    result = await CodeExecutor.execute(execution.code, execution.language, execution.input)
+    executor = CodeExecutor()
+    result = await executor.execute(execution.code, execution.language, execution.stdin)
     return result
 
-@router.get("/{session_id}/participants", response_model=list[Participant])
+@router.get("/{session_id}/participants", response_model=List[Participant])
 async def get_participants(session_id: str):
     """Get session participants"""
     session_data = db.get_session(session_id)
@@ -138,4 +157,13 @@ async def get_participants(session_id: str):
             detail="Session not found"
         )
     
-    return db.get_participants(session_id)
+    participant_ids = db.get_participants(session_id)
+    participants = [
+        Participant(
+            user_id=user_id,
+            username=db.get_user(user_id)["username"],
+            joined_at=datetime.utcnow()
+        )
+        for user_id in participant_ids
+    ]
+    return participants

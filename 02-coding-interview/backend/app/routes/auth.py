@@ -20,7 +20,8 @@ async def signup(user_data: UserSignup):
     
     # Create user
     hashed_password = hash_password(user_data.password)
-    user = db.create_user(user_data.username, user_data.email, hashed_password)
+    user_dict = db.create_user(user_data.username, user_data.email, hashed_password)
+    user = User(**user_dict)
     
     # Create token
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -63,10 +64,10 @@ async def login(credentials: UserLogin):
 @router.get("/me", response_model=User)
 async def get_current_user(user_id: str = Depends(verify_token)):
     """Get current user info"""
-    user = db.get_user(user_id)
-    if not user:
+    user_dict = db.get_user(user_id)
+    if not user_dict:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    return user
+    return User(**user_dict)
