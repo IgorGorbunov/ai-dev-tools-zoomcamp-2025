@@ -3,7 +3,24 @@ import { useParams } from 'react-router-dom'
 import Editor from '@monaco-editor/react'
 import { sessionService } from '@/services/api'
 
-export const SessionEditor: React.FC = () => {
+// Language mapping for Monaco Editor
+const getMonacoLanguage = (language: string): string => {
+  const languageMap: Record<string, string> = {
+    python: 'python',
+    javascript: 'javascript',
+    js: 'javascript',
+    java: 'java',
+    cpp: 'cpp',
+    c: 'c',
+    go: 'go',
+    typescript: 'typescript',
+    ts: 'typescript',
+    ruby: 'ruby',
+    php: 'php',
+    rust: 'rust',
+  }
+  return languageMap[language.toLowerCase()] || 'python'
+}
   const { sessionId } = useParams<{ sessionId: string }>()
   const [session, setSession] = useState<any>(null)
   const [code, setCode] = useState('')
@@ -76,7 +93,7 @@ export const SessionEditor: React.FC = () => {
         <div className="flex-1 flex flex-col">
           <Editor
             height="100%"
-            language={session?.language === 'javascript' ? 'javascript' : 'python'}
+            language={getMonacoLanguage(session?.language || 'python')}
             value={code}
             onChange={(value) => setCode(value || '')}
             theme="vs-dark"
@@ -84,6 +101,15 @@ export const SessionEditor: React.FC = () => {
               minimap: { enabled: false },
               fontSize: 14,
               fontFamily: 'Fira Code, monospace',
+              formatOnPaste: true,
+              formatOnType: true,
+              autoClosingBrackets: 'always',
+              autoClosingQuotes: 'always',
+              autoIndent: 'full',
+              lineNumbers: 'on',
+              scrollBeyondLastLine: false,
+              renderWhitespace: 'selection',
+              suggestOnTriggerCharacters: true,
             }}
           />
         </div>
