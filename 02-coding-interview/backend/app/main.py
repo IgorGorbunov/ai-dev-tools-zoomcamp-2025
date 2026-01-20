@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from .routes import health, auth, sessions
 
 # Create FastAPI app
@@ -40,3 +42,8 @@ app.include_router(
 async def root():
     """Root endpoint"""
     return {"message": "Coding Interview Platform API"}
+
+# Serve static files (frontend)
+static_path = Path(__file__).parent / "static"
+if static_path.exists():
+    app.mount("/", StaticFiles(directory=str(static_path), html=True), name="static")

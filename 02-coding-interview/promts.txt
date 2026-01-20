@@ -33,6 +33,6 @@ monaco-editor
 pyodide
 
 6. Containerization
-
+node:18-alpine
 
 7. Deployment
