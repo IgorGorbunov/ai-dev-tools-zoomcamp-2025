@@ -23,6 +23,9 @@ write integration tests that check that the interaction between client and serve
 add all the commands for running and testing application into README.md
 
 3. Running Both Client and Server
+How I can run both client and server at the same time. Use concurrently for that.
+concurrently "npm run dev:backend" "npm run dev:frontend"
+
 4. Syntax Highlighting
 5. Code Execution
 6. Containerization
