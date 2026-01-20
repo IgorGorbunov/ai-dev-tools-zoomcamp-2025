@@ -19,6 +19,9 @@ for init work directory of project use ai-dev-tools-zoomcamp-2025/02-coding-inte
 follow the guidelines in AGENTS.md
 
 2. Integration Tests
+write integration tests that check that the interaction between client and server works.
+add all the commands for running and testing application into README.md
+
 3. Running Both Client and Server
 4. Syntax Highlighting
 5. Code Execution
