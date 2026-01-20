@@ -16,8 +16,10 @@ async def test_cors_allows_origin():
         )
 
         assert response.status_code in (200, 204)
-        # CORS middleware in app is configured to allow all origins
-        assert response.headers.get("access-control-allow-origin") == "*"
+        # CORS middleware may echo the requesting origin or return '*'
+        allow_origin = response.headers.get("access-control-allow-origin")
+        assert allow_origin is not None
+        assert allow_origin in ("*", "http://localhost:5173")
 
 
 @pytest.mark.asyncio

@@ -19,9 +19,10 @@ export const Home: React.FC = () => {
   const loadSessions = async () => {
     try {
       const data = await sessionService.getSessions()
-      setSessions(data.items)
+      setSessions(data.sessions || data.items || data || [])
     } catch (err) {
       console.error('Failed to load sessions', err)
+      setSessions([])
     } finally {
       setLoading(false)
     }
