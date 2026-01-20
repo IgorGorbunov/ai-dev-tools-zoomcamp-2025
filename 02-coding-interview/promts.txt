@@ -27,6 +27,12 @@ How I can run both client and server at the same time. Use concurrently for that
 concurrently "npm run dev:backend" "npm run dev:frontend"
 
 4. Syntax Highlighting
+monaco-editor
+
 5. Code Execution
+pyodide
+
 6. Containerization
+
+
 7. Deployment

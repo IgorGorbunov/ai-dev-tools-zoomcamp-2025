@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Editor from '@monaco-editor/react'
 import { sessionService } from '@/services/api'
+import { executeCode } from '@/lib/codeExecutor'
 
 // Language mapping for Monaco Editor
 const getMonacoLanguage = (language: string): string => {
@@ -50,10 +51,10 @@ const getMonacoLanguage = (language: string): string => {
   }
 
   const handleExecute = async () => {
-    if (!sessionId) return
+    if (!sessionId || !session) return
     setExecuting(true)
     try {
-      const result = await sessionService.executeCode(sessionId, code, session.language, input)
+      const result = await executeCode(session.language, code, input)
       setOutput(result.success ? result.output : `Error: ${result.error}`)
     } catch (err: any) {
       setOutput(`Error: ${err.message}`)
